@@ -71,15 +71,26 @@ public class CharacterControllerTest {
 	
 	@Test
 	public void givenCharacterThenSaveIt(){
+		String name = "character's Name";
 		Character character = new Character();
+		character.setName(name);
+		
+		ResponseEntity response = characterController.save(name, character);
 		
 		Mockito.verify(characterService).save(character);
-		
-		ResponseEntity response = characterController.save(character);
 		
 		assertNotNull("Response is null",response);
 		assertNotNull("Response is null",response.getStatusCode());
 		assertEquals("HTTPCode isn't created", response.getStatusCode(), HttpStatus.ACCEPTED);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void givenWrongNameThenThrowException(){
+		String name = "character's Name";
+		Character character = new Character();
+		character.setName("other Name");
+		
+		ResponseEntity response = characterController.save(name, character);
 	}
 	
 	@Test
@@ -88,9 +99,9 @@ public class CharacterControllerTest {
 		Character character = new Character();
 		
 		ArgumentCaptor<Character> characterCaptor = ArgumentCaptor.forClass(Character.class);
+		ResponseEntity response = characterController.create(name);
 		
 		Mockito.verify(characterService).save(characterCaptor.capture());
-		ResponseEntity response = characterController.create(name);
 		
 		assertNotNull("Character isn't send to service",characterCaptor.getValue());
 		assertEquals("The name is not the expected", name, characterCaptor.getValue().getName());
