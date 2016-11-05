@@ -18,6 +18,7 @@ import com.opipo.relac.model.Relationship;
 @RestController
 @RequestMapping("/character")
 public class CharacterController {
+	
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Collection<String>> list() {

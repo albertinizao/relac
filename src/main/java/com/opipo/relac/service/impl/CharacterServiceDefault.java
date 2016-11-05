@@ -1,6 +1,7 @@
 package com.opipo.relac.service.impl;
 
 import java.util.Collection;
+import com.opipo.relac.model.Character;
 
 import com.opipo.relac.service.CharacterService;
 
