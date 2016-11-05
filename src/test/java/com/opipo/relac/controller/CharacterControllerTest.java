@@ -62,11 +62,11 @@ public class CharacterControllerTest {
 		
 		Mockito.when(characterService.get(name)).thenReturn(expected);
 		
-		Character actual = characterController.get(name);
+		ResponseEntity<Character> actual = characterController.get(name);
 		
 		assertNotNull("Actual is null",actual);
 		assertNotNull("Actual is null",actual.getBody());
-		assertEquals("Actual isn't the expected",expected,actual);
+		assertEquals("Actual isn't the expected",expected,actual.getBody());
 	}
 	
 	@Test
