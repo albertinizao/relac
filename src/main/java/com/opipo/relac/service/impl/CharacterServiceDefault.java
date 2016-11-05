@@ -2,9 +2,9 @@ package com.opipo.relac.service.impl;
 
 import java.util.Collection;
 
-import com.opipo.relac.service.ControllerService;
+import com.opipo.relac.service.CharacterService;
 
-public class ControllerServiceDefault implements ControllerService {
+public class CharacterServiceDefault implements CharacterService {
 
 	@Override
 	public Collection<Character> list() {
