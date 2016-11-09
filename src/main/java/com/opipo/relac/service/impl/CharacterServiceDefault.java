@@ -1,14 +1,14 @@
 package com.opipo.relac.service.impl;
 
-import java.util.Collection;
-import com.opipo.relac.model.Character;
+import java.util.List;
 
+import com.opipo.relac.model.Character;
 import com.opipo.relac.service.CharacterService;
 
 public class CharacterServiceDefault implements CharacterService {
 
 	@Override
-	public Collection<Character> list() {
+	public List<Character> list() {
 		// TODO Auto-generated method stub
 		return null;
 	}

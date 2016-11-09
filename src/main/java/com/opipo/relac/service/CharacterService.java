@@ -1,10 +1,11 @@
 package com.opipo.relac.service;
 
-import java.util.Collection;
+import java.util.List;
+
 import com.opipo.relac.model.Character;
 
 public interface CharacterService {
-	Collection<Character> list();
+	List<Character> list();
 	Character get(String name);
 	Character save(Character character);
 }
