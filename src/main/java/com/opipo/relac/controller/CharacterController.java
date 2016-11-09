@@ -38,6 +38,7 @@ public class CharacterController {
 	@RequestMapping(value = "/{name}", method = RequestMethod.PUT)
 	public @ResponseBody ResponseEntity save(@PathVariable("name") String name, @RequestBody Character character) {
 		Assert.isTrue(name.equalsIgnoreCase(character.getName()), "The name is not the expected");
+		Assert.notNull(characterService.get(name), "The character not exists");
 		characterService.save(character);
 		return new ResponseEntity(HttpStatus.ACCEPTED);
 	}

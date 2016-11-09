@@ -76,6 +76,8 @@ public class CharacterControllerTest {
 		Character character = new Character();
 		character.setName(name);
 		
+		Mockito.when(characterService.get(name)).thenReturn(character);
+		
 		ResponseEntity response = characterController.save(name, character);
 		
 		Mockito.verify(characterService).save(character);
@@ -94,10 +96,23 @@ public class CharacterControllerTest {
 		ResponseEntity response = characterController.save(name, character);
 	}
 	
+	@Test(expected=IllegalArgumentException.class)
+	public void givenInexistentCharacterToUpdateThrowException(){
+		String name = "character's Name";
+		Character character = new Character();
+		character.setName(name);
+		
+		Mockito.when(characterService.get(name)).thenReturn(null);
+		
+		ResponseEntity response = characterController.save(name, character);
+	}
+	
 	@Test
 	public void givenNameThenCreateCharacter(){
 		String name = "Character's name";
 		Character character = new Character();
+		
+		Mockito.when(characterService.get(name)).thenReturn(null);
 		
 		ArgumentCaptor<Character> characterCaptor = ArgumentCaptor.forClass(Character.class);
 		ResponseEntity response = characterController.create(name);
@@ -109,5 +124,14 @@ public class CharacterControllerTest {
 		assertNotNull("Response is null",response);
 		assertNotNull("Response is null",response.getStatusCode());
 		assertEquals("HTTPCode isn't created", response.getStatusCode(), HttpStatus.CREATED);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void givenNameOfCreatedCharacterThenThrowsException(){
+		String name = "Character's name";
+		Character character = new Character();
+		
+		Mockito.when(characterService.get(name)).thenReturn(character);
+		characterController.create(name);
 	}
 }

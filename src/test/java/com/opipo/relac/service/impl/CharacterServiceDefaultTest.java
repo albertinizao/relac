@@ -65,6 +65,21 @@ public class CharacterServiceDefaultTest {
 		assertEquals(name,characterCaptured.getName());
 		assertEquals(relationships,characterCaptured.getRelationships());
 	}
+
+	@Test
+	public void givenCharacterUncompleteThenSaveIt2(){
+		String name = "character's name";
+		Character givenCharacter = new Character();
+		givenCharacter.setName(name);
+		Mockito.when(characterRepository.findOne(name)).thenReturn(null);
+		characterService.save(givenCharacter);
+		ArgumentCaptor<Character> characterCaptor = ArgumentCaptor.forClass(Character.class);
+		Mockito.verify(characterRepository).save(characterCaptor.capture());
+		Character characterCaptured = characterCaptor.getValue();
+		assertNotNull(characterCaptured);
+		assertEquals(name,characterCaptured.getName());
+		assertEquals(null,characterCaptured.getRelationships());
+	}
 	
 	@Test
 	public void givenCharacterNameThenDeleteIT(){

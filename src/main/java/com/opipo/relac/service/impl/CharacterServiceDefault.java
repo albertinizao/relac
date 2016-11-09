@@ -28,7 +28,7 @@ public class CharacterServiceDefault implements CharacterService {
 	@Override
 	public Character save(Character character) {
 		Character completeCharacter = this.get(character.getName());
-		character.setRelationships(completeCharacter.getRelationships());
+		character.setRelationships(completeCharacter==null?null:completeCharacter.getRelationships());
 		return characterRepository.save(character);
 	}
 
