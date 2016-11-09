@@ -1,7 +1,6 @@
 package com.opipo.relac.repository;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -42,12 +41,13 @@ public class CharacterRepositoryIntegrationTest {
 		characterRepository.save(expected2);
 		Character actual2 = characterRepository.findOne(name2);
 		assertEquals(expected2.getName(), actual2.getName());
-		List<String> charactersNames=characterRepository.findAll().stream().map(f->f.getName()).collect(Collectors.toList());
-		assertEquals(2,charactersNames.size());
+		List<String> charactersNames = characterRepository.findAll().stream().map(f -> f.getName())
+				.collect(Collectors.toList());
+		assertEquals(2, charactersNames.size());
 		assertTrue(charactersNames.contains(name));
 		assertTrue(charactersNames.contains(name2));
 		characterRepository.deleteAll();
 		assertTrue(characterRepository.findAll().isEmpty());
-		
+
 	}
 }
