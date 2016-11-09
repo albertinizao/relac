@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,7 +42,7 @@ public class CharacterControllerTest {
 		Character character2 = new Character();
 		character2.setName(name2);
 
-		Collection<Character> characters = new ArrayList<>();
+		List<Character> characters = new ArrayList<>();
 		characters.add(character1);
 		characters.add(character2);
 

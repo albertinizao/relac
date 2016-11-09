@@ -8,15 +8,18 @@ import java.util.Collection;
 import java.util.List;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import com.opipo.relac.model.Character;
 import com.opipo.relac.model.Relationship;
 import com.opipo.relac.repository.CharacterRepository;;
 
+@RunWith(MockitoJUnitRunner.class)
 public class CharacterServiceDefaultTest {
 	@InjectMocks
 	private CharacterServiceDefault characterService;
@@ -54,11 +57,20 @@ public class CharacterServiceDefaultTest {
 		Collection<Relationship> relationships = new ArrayList<>();
 		completeCharacter.setRelationships(relationships);
 		Mockito.when(characterRepository.findOne(name)).thenReturn(completeCharacter);
+		characterService.save(givenCharacter);
 		ArgumentCaptor<Character> characterCaptor = ArgumentCaptor.forClass(Character.class);
 		Mockito.verify(characterRepository).save(characterCaptor.capture());
 		Character characterCaptured = characterCaptor.getValue();
 		assertNotNull(characterCaptured);
 		assertEquals(name,characterCaptured.getName());
 		assertEquals(relationships,characterCaptured.getRelationships());
+	}
+	
+	@Test
+	public void givenCharacterNameThenDeleteIT(){
+		String name = "character's name";
+		characterService.delete(name);
+		Mockito.verify(characterRepository).delete(name);
+		
 	}
 }

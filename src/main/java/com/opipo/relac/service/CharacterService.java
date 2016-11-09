@@ -8,4 +8,5 @@ public interface CharacterService {
 	List<Character> list();
 	Character get(String name);
 	Character save(Character character);
+	void delete(String name);
 }
