@@ -2,7 +2,9 @@ package com.opipo.relac.model;
 
 import java.util.Collection;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document
 public class Character {
 	@Id
 	private String name;
