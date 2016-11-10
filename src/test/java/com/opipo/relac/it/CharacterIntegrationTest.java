@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -41,6 +42,9 @@ public class CharacterIntegrationTest {
 	@Autowired
 	private CharacterRepository characterRepository;
 
+	@Autowired
+	private MongoTemplate mongoTemplate;
+
 	private String name = "character's name";
 
 	private String name2 = "character's name 2";
@@ -50,13 +54,13 @@ public class CharacterIntegrationTest {
 	private Character character2;
 
 	@Before
-	public void init() {
+	public void setUp() {
 		character = new Character();
 		character.setName(name);
-		characterRepository.insert(character);
+		mongoTemplate.insert(character);
 		character2 = new Character();
 		character2.setName(name2);
-		characterRepository.insert(character2);
+		mongoTemplate.insert(character2);
 	}
 
 	@Test
@@ -87,8 +91,8 @@ public class CharacterIntegrationTest {
 		assertNull(characterRepository.findOne(newName));
 		ResponseEntity response = this.restTemplate.postForEntity("/character/{name}", null, Character.class, newName);
 		assertNotNull(response);
-		assertNotNull(characterRepository.findOne(newName));
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		assertNotNull(characterRepository.findOne(newName));
 	}
 
 	@Test
@@ -127,7 +131,7 @@ public class CharacterIntegrationTest {
 		ResponseEntity response = this.restTemplate.exchange("/character/{name}", HttpMethod.PUT, entity,
 				Character.class, newName);
 		assertNotNull(response);
-		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 	}
 
 }

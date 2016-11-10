@@ -18,7 +18,7 @@ public class Character {
 		this.name = name;
 	}
 	public List<Relationship> getRelationships() {
-		return relationships==null?new ArrayList<>():new ArrayList<>();
+		return relationships==null?new ArrayList<>():new ArrayList<>(relationships);
 	}
 	public void setRelationships(List<Relationship> relationships) {
 		this.relationships = relationships==null?null:new ArrayList<>(relationships);

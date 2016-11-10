@@ -19,6 +19,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.opipo.relac.exception.NotFoundElement;
 import com.opipo.relac.model.Character;
 import com.opipo.relac.service.CharacterService;
 
@@ -112,12 +113,12 @@ public class CharacterControllerTest {
 		String name = "Character's name";
 		Character character = new Character();
 		
-		Mockito.when(characterService.get(name)).thenReturn(null);
+		Mockito.when(characterService.get(name)).thenThrow(new NotFoundElement("character"));
 		
 		ArgumentCaptor<Character> characterCaptor = ArgumentCaptor.forClass(Character.class);
 		ResponseEntity response = characterController.create(name);
 		
-		Mockito.verify(characterService).save(characterCaptor.capture());
+		Mockito.verify(characterService).saveOverride(characterCaptor.capture());
 		
 		assertNotNull("Character isn't send to service",characterCaptor.getValue());
 		assertEquals("The name is not the expected", name, characterCaptor.getValue().getName());

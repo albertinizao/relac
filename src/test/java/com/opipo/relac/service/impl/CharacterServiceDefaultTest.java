@@ -2,6 +2,7 @@ package com.opipo.relac.service.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -78,7 +79,7 @@ public class CharacterServiceDefaultTest {
 		Character characterCaptured = characterCaptor.getValue();
 		assertNotNull(characterCaptured);
 		assertEquals(name,characterCaptured.getName());
-		assertEquals(null,characterCaptured.getRelationships());
+		assertTrue(characterCaptured.getRelationships().isEmpty());
 	}
 	
 	@Test
