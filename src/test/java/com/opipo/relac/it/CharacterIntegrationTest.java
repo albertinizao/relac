@@ -15,10 +15,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
@@ -28,37 +31,36 @@ import com.opipo.relac.model.Character;
 import com.opipo.relac.repository.CharacterRepository;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(classes = { RelacApplication.class, UnitTestApplicationConfig.class })
+@SpringBootTest(classes = { UnitTestApplicationConfig.class }, webEnvironment = WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@ActiveProfiles("test")
 public class CharacterIntegrationTest {
 
 	@Autowired
 	private TestRestTemplate restTemplate;
-	
+
 	@Autowired
 	private CharacterRepository characterRepository;
-	
+
+	@Autowired
+	private MongoTemplate mongoTemplate;
+
 	private String name = "character's name";
-	
+
 	private String name2 = "character's name 2";
-	
+
 	private Character character;
-	
+
 	private Character character2;
-	
+
 	@Before
-	public void init(){
-		 character = new Character();
+	public void setUp() {
+		character = new Character();
 		character.setName(name);
-		characterRepository.insert(character);
+		mongoTemplate.insert(character);
 		character2 = new Character();
 		character2.setName(name2);
-		characterRepository.insert(character2);
-	}
-	
-	@After
-	public void end(){
-		characterRepository.deleteAll();
+		mongoTemplate.insert(character2);
 	}
 
 	@Test
@@ -69,8 +71,8 @@ public class CharacterIntegrationTest {
 		assertNotNull(responseCollection);
 		assertTrue(responseCollection.contains(name));
 		assertTrue(responseCollection.contains(name2));
-		assertEquals(2,responseCollection.size());
-		assertEquals(HttpStatus.OK,response.getStatusCode());
+		assertEquals(2, responseCollection.size());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
 	@Test
@@ -79,8 +81,8 @@ public class CharacterIntegrationTest {
 		assertNotNull(response);
 		Character responseCharacter = response.getBody();
 		assertNotNull(responseCharacter);
-		assertEquals(name,responseCharacter.getName());
-		assertEquals(HttpStatus.OK,response.getStatusCode());
+		assertEquals(name, responseCharacter.getName());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
 	@Test
@@ -89,8 +91,8 @@ public class CharacterIntegrationTest {
 		assertNull(characterRepository.findOne(newName));
 		ResponseEntity response = this.restTemplate.postForEntity("/character/{name}", null, Character.class, newName);
 		assertNotNull(response);
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 		assertNotNull(characterRepository.findOne(newName));
-		assertEquals(HttpStatus.CREATED,response.getStatusCode());
 	}
 
 	@Test
@@ -98,24 +100,26 @@ public class CharacterIntegrationTest {
 		assertNotNull(characterRepository.findOne(name));
 		ResponseEntity response = this.restTemplate.postForEntity("/character/{name}", null, Character.class, name);
 		assertNotNull(response);
-		assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 	}
 
 	@Test
 	public void update() {
-	    HttpEntity<Character> entity = new HttpEntity<Character>(character, null); 
-		ResponseEntity response = this.restTemplate.exchange("/character/{name}", HttpMethod.PUT, entity, Character.class, name);
+		HttpEntity<Character> entity = new HttpEntity<Character>(character, null);
+		ResponseEntity response = this.restTemplate.exchange("/character/{name}", HttpMethod.PUT, entity,
+				Character.class, name);
 		assertNotNull(response);
-		assertEquals(HttpStatus.ACCEPTED,response.getStatusCode());
+		assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
 	}
 
 	@Test
 	public void updateInconexRequest() {
 		String newName = "newName";
-	    HttpEntity<Character> entity = new HttpEntity<Character>(character, null); 
-		ResponseEntity response = this.restTemplate.exchange("/character/{name}", HttpMethod.PUT, entity, Character.class, newName);
+		HttpEntity<Character> entity = new HttpEntity<Character>(character, null);
+		ResponseEntity response = this.restTemplate.exchange("/character/{name}", HttpMethod.PUT, entity,
+				Character.class, newName);
 		assertNotNull(response);
-		assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
+		assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
 	}
 
 	@Test
@@ -123,10 +127,11 @@ public class CharacterIntegrationTest {
 		String newName = "newName";
 		Character otherCharacter = new Character();
 		otherCharacter.setName(newName);
-	    HttpEntity<Character> entity = new HttpEntity<Character>(otherCharacter, null); 
-		ResponseEntity response = this.restTemplate.exchange("/character/{name}", HttpMethod.PUT, entity, Character.class, newName);
+		HttpEntity<Character> entity = new HttpEntity<Character>(otherCharacter, null);
+		ResponseEntity response = this.restTemplate.exchange("/character/{name}", HttpMethod.PUT, entity,
+				Character.class, newName);
 		assertNotNull(response);
-		assertEquals(HttpStatus.BAD_REQUEST,response.getStatusCode());
+		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 	}
 
 }

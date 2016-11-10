@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.opipo.relac.exception.NotFoundElement;
 import com.opipo.relac.model.Character;
 import com.opipo.relac.service.CharacterService;
 
@@ -47,8 +48,11 @@ public class CharacterController {
 	public @ResponseBody ResponseEntity create(@PathVariable("name") String name) {
 		Character character = new Character();
 		character.setName(name);
-		Assert.isNull(characterService.get(name), "The character is already created");
-		characterService.save(character);
+		try{
+			Assert.isNull(characterService.get(name), "The character is already created");
+		}catch(NotFoundElement nfe){
+			characterService.saveOverride(character);
+		}
 		return new ResponseEntity(HttpStatus.CREATED);
 	}
 }

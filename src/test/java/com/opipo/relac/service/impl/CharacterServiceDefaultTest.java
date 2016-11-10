@@ -2,6 +2,7 @@ package com.opipo.relac.service.impl;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,7 +55,7 @@ public class CharacterServiceDefaultTest {
 		givenCharacter.setName(name);
 		Character completeCharacter = new Character();
 		completeCharacter.setName(name+"incorrect");
-		Collection<Relationship> relationships = new ArrayList<>();
+		List<Relationship> relationships = new ArrayList<>();
 		completeCharacter.setRelationships(relationships);
 		Mockito.when(characterRepository.findOne(name)).thenReturn(completeCharacter);
 		characterService.save(givenCharacter);
@@ -78,7 +79,7 @@ public class CharacterServiceDefaultTest {
 		Character characterCaptured = characterCaptor.getValue();
 		assertNotNull(characterCaptured);
 		assertEquals(name,characterCaptured.getName());
-		assertEquals(null,characterCaptured.getRelationships());
+		assertTrue(characterCaptured.getRelationships().isEmpty());
 	}
 	
 	@Test
