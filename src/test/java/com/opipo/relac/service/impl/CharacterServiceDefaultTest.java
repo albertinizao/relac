@@ -54,7 +54,7 @@ public class CharacterServiceDefaultTest {
 		givenCharacter.setName(name);
 		Character completeCharacter = new Character();
 		completeCharacter.setName(name+"incorrect");
-		Collection<Relationship> relationships = new ArrayList<>();
+		List<Relationship> relationships = new ArrayList<>();
 		completeCharacter.setRelationships(relationships);
 		Mockito.when(characterRepository.findOne(name)).thenReturn(completeCharacter);
 		characterService.save(givenCharacter);

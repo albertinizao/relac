@@ -1,6 +1,8 @@
 package com.opipo.relac.model;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -8,18 +10,18 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Character {
 	@Id
 	private String name;
-	private Collection<Relationship> relationships;
+	private List<Relationship> relationships;
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
 	}
-	public Collection<Relationship> getRelationships() {
-		return relationships;
+	public List<Relationship> getRelationships() {
+		return relationships==null?new ArrayList<>():new ArrayList<>();
 	}
-	public void setRelationships(Collection<Relationship> relationships) {
-		this.relationships = relationships;
+	public void setRelationships(List<Relationship> relationships) {
+		this.relationships = relationships==null?null:new ArrayList<>(relationships);
 	}
 	
 	
