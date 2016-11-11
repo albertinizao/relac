@@ -1,11 +1,11 @@
 package com.opipo.relac.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.List;
 
 public class Relationship {
 	private String characterName;
-	private Collection<Relation> relation;
+	private List<Relation> relation;
 
 	public String getCharacterName() {
 		return characterName;
@@ -15,12 +15,12 @@ public class Relationship {
 		this.characterName = characterName;
 	}
 
-	public Collection<Relation> getRelation() {
-		return relation == null ? null : new ArrayList<>(relation);
+	public List<Relation> getRelation() {
+		return relation == null ? new ArrayList<>() : new ArrayList<>(relation);
 	}
 
-	public void setRelation(Collection<Relation> relation) {
-		this.relation = relation == null ? null : new ArrayList<>(relation);
+	public void setRelation(List<Relation> relation) {
+		this.relation = relation == null ? new ArrayList<>() : new ArrayList<>(relation);
 	}
 
 }
