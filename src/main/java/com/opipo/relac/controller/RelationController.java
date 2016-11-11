@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.opipo.relac.model.Relation;
 import com.opipo.relac.service.RelationService;
-import com.vividsolutions.jts.util.Assert;
 
 @RestController
 @RequestMapping("/character/{owner}/relationship/{otherCharacter}/relation")
@@ -42,7 +42,7 @@ public class RelationController {
 	public ResponseEntity save(@PathVariable("owner") String ownersName,
 			@PathVariable("characterName") String otherName, @PathVariable("date") Date date,
 			@RequestBody Relation relation) {
-		Assert.equals(date, relation.getDate(), "The date is not the expected");
+		Assert.isTrue(date.equals(relation.getDate()), "The date is not the expected");
 		relationService.save(ownersName, otherName, relation);
 		return new ResponseEntity(HttpStatus.ACCEPTED);
 	}
