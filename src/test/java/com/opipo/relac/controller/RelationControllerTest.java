@@ -64,7 +64,7 @@ public class RelationControllerTest {
 
 		Mockito.when(relationService.get(ownerName, otherName, date)).thenReturn(relation);
 
-		ResponseEntity<Relation> response = relationController.get(ownerName, otherName, date);
+		ResponseEntity<Relation> response = relationController.get(ownerName, otherName, date.getTime());
 
 		assertNotNull(response);
 		assertNotNull(response.getBody());
@@ -82,7 +82,7 @@ public class RelationControllerTest {
 		relation.setDate(date);
 
 		ArgumentCaptor<Relation> relationCaptor = ArgumentCaptor.forClass(Relation.class);
-		ResponseEntity response = relationController.create(ownerName, otherName, date);
+		ResponseEntity response = relationController.create(ownerName, otherName, date.getTime());
 
 		Mockito.verify(relationService).save(Mockito.eq(ownerName), Mockito.eq(otherName), relationCaptor.capture());
 
@@ -103,7 +103,7 @@ public class RelationControllerTest {
 		relation.setDate(date);
 
 		Mockito.when(relationService.save(ownerName, otherName, relation)).thenReturn(relation);
-		ResponseEntity response = relationController.save(ownerName, otherName, date, relation);
+		ResponseEntity response = relationController.save(ownerName, otherName, date.getTime(), relation);
 
 		assertNotNull("Response is null", response);
 		assertNotNull("Response is null", response.getStatusCode());
