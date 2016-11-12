@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.opipo.relac.exception.NotFoundElement;
 import com.opipo.relac.model.Character;
 import com.opipo.relac.service.CharacterService;
+import com.opipo.relac.service.UserService;
 
 @RestController
 @RequestMapping("/character")
@@ -24,6 +28,9 @@ public class CharacterController {
 
 	@Autowired
 	private CharacterService characterService;
+
+	@Autowired
+	private UserService userService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Collection<String>> list() {
@@ -36,7 +43,7 @@ public class CharacterController {
 		return new ResponseEntity<Character>(characterService.get(name), HttpStatus.OK);
 	}
 
-	@RequestMapping(value = "/{name}", method = RequestMethod.PUT)
+	@RequestMapping(value = "/{name}", method = RequestMethod.PUT, consumes = {"application/json"})
 	public @ResponseBody ResponseEntity save(@PathVariable("name") String name, @RequestBody Character character) {
 		Assert.isTrue(name.equalsIgnoreCase(character.getName()), "The name is not the expected");
 		Assert.notNull(characterService.get(name), "The character not exists");
@@ -48,9 +55,9 @@ public class CharacterController {
 	public @ResponseBody ResponseEntity create(@PathVariable("name") String name) {
 		Character character = new Character();
 		character.setName(name);
-		try{
+		try {
 			Assert.isNull(characterService.get(name), "The character is already created");
-		}catch(NotFoundElement nfe){
+		} catch (NotFoundElement nfe) {
 			characterService.saveOverride(character);
 		}
 		return new ResponseEntity(HttpStatus.CREATED);

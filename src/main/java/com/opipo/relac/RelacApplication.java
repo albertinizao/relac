@@ -7,7 +7,14 @@ import java.util.List;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
+import org.springframework.web.context.request.RequestContextListener;
 
 import com.opipo.relac.model.Character;
 import com.opipo.relac.model.Relation;
@@ -15,10 +22,16 @@ import com.opipo.relac.model.Relationship;
 import com.opipo.relac.repository.CharacterRepository;
 
 @SpringBootApplication
-public class RelacApplication {
+@EnableOAuth2Sso
+public class RelacApplication extends WebSecurityConfigurerAdapter {
 
 	public static void main(String[] args) {
 		SpringApplication.run(RelacApplication.class, args);
+	}
+
+	@Bean
+	public RequestContextListener requestContextListener() {
+		return new RequestContextListener();
 	}
 
 	@Bean
@@ -48,5 +61,29 @@ public class RelacApplication {
 
 		};
 
+	}
+
+	// @Override
+	// protected void configure(HttpSecurity http) throws Exception {
+	// http.antMatcher("/**").authorizeRequests().antMatchers("/", "/login**",
+	// "/webjars/**").permitAll().anyRequest()
+	// .authenticated();
+	// }
+
+//	@Override
+//	protected void configure(HttpSecurity http) throws Exception {
+//		http.antMatcher("/**").authorizeRequests().anyRequest().permitAll();
+//		http.csrf().disable();
+//	}
+
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.inMemoryAuthentication().withUser("user").password("pass").roles("USER");
+	}
+
+	private CsrfTokenRepository csrfTokenRepository() {
+		HttpSessionCsrfTokenRepository repository = new HttpSessionCsrfTokenRepository();
+		repository.setSessionAttributeName("_csrf");
+		return repository;
 	}
 }
