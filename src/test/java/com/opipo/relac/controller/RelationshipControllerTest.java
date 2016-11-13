@@ -2,10 +2,12 @@ package com.opipo.relac.controller;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,10 +37,13 @@ public class RelationshipControllerTest {
 		Relationship relationship = new Relationship();
 		relationships.add(relationship);
 		Mockito.when(relationshipService.list(ownersName)).thenReturn(relationships);
-		ResponseEntity<Collection<Relationship>> response = relationshipController.list(ownersName);
+		ResponseEntity<Collection<String>> response = relationshipController.list(ownersName);
 		assertNotNull("There is no response", response);
 		assertNotNull("There is no response body", response.getBody());
-		assertEquals("There is no the expected response", relationships, response.getBody());
+		assertTrue("There is no the expected response", relationships.stream().map(f -> f.getCharacterName())
+				.collect(Collectors.toList()).containsAll(response.getBody()));
+		assertTrue("There is no the expected response", response.getBody()
+				.containsAll(relationships.stream().map(f -> f.getCharacterName()).collect(Collectors.toList())));
 		assertEquals("HTTPCode isn't correct", response.getStatusCode(), HttpStatus.OK);
 	}
 
@@ -68,7 +73,7 @@ public class RelationshipControllerTest {
 		assertEquals("HTTPCode isn't correct", response.getStatusCode(), HttpStatus.ACCEPTED);
 	}
 
-	@Test(expected=IllegalArgumentException.class)
+	@Test(expected = IllegalArgumentException.class)
 	public void givenOwnerNameAndRelationshipBrokenThenSaveIt() {
 		String ownersName = "owner Name";
 		String otherName = "character name";
