@@ -1,6 +1,8 @@
 package com.opipo.relac.controller;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.opipo.relac.exception.NotFoundElement;
 import com.opipo.relac.model.Character;
+import com.opipo.relac.model.Relation;
+import com.opipo.relac.model.Relationship;
 import com.opipo.relac.service.CharacterService;
 import com.opipo.relac.service.UserService;
 
@@ -37,7 +41,19 @@ public class CharacterController {
 
 	@RequestMapping(value = "/{name}", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Character> get(@PathVariable("name") String name) {
-		return new ResponseEntity<Character>(characterService.get(name), HttpStatus.OK);
+		Character character = characterService.get(name);
+		List<Relationship> relationshipsPrevious = character.getRelationships();
+		List<Relationship> relationships = new ArrayList<>();
+		for (Relationship relationship : relationshipsPrevious) {
+			List<Relation> relationPrevious = relationship.getRelation();
+			List<Relation> relations = new ArrayList<>();
+			Relation firstRelation = relationPrevious.stream().sorted((t,o)->o.getDate().compareTo(t.getDate())).findFirst().orElse(null);
+			relations.add(firstRelation);
+			relationship.setRelation(relations);
+			relationships.add(relationship);
+		}
+		character.setRelationships(relationships);
+		return new ResponseEntity<Character>(character, HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{name}", method = RequestMethod.PUT)

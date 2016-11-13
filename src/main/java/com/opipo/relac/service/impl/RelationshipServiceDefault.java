@@ -40,7 +40,7 @@ public class RelationshipServiceDefault implements RelationshipService {
 				.collect(Collectors.toList());
 		relationships.add(relationship);
 		owner.setRelationships(relationships);
-		characterService.save(owner);
+		characterService.saveOverride(owner);
 		return relationship;
 	}
 
@@ -51,7 +51,7 @@ public class RelationshipServiceDefault implements RelationshipService {
 				.filter(p -> !characterName.equalsIgnoreCase(p.getCharacterName()))
 				.collect(Collectors.toList());
 		owner.setRelationships(relationships);
-		characterService.save(owner);
+		characterService.saveOverride(owner);
 	}
 
 }

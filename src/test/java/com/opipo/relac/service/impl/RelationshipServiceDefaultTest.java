@@ -110,7 +110,7 @@ public class RelationshipServiceDefaultTest {
 		relationshipService.save(ownerName, relationshipToSave);
 
 		ArgumentCaptor<Character> characterCaptor = ArgumentCaptor.forClass(Character.class);
-		Mockito.verify(characterService).save(characterCaptor.capture());
+		Mockito.verify(characterService).saveOverride(characterCaptor.capture());
 		Character characterCaptured = characterCaptor.getValue();
 		assertNotNull(characterCaptured);
 		assertEquals(ownerName, characterCaptured.getName());
@@ -140,7 +140,7 @@ public class RelationshipServiceDefaultTest {
 		relationshipService.save(ownerName, relationshipToSave);
 
 		ArgumentCaptor<Character> characterCaptor = ArgumentCaptor.forClass(Character.class);
-		Mockito.verify(characterService).save(characterCaptor.capture());
+		Mockito.verify(characterService).saveOverride(characterCaptor.capture());
 		Character characterCaptured = characterCaptor.getValue();
 		assertNotNull(characterCaptured);
 		assertEquals(ownerName, characterCaptured.getName());
@@ -170,7 +170,7 @@ public class RelationshipServiceDefaultTest {
 		relationshipService.delete(ownerName, otherName);
 
 		ArgumentCaptor<Character> characterCaptor = ArgumentCaptor.forClass(Character.class);
-		Mockito.verify(characterService).save(characterCaptor.capture());
+		Mockito.verify(characterService).saveOverride(characterCaptor.capture());
 		Character characterCaptured = characterCaptor.getValue();
 		assertNotNull(characterCaptured);
 		assertEquals(ownerName, characterCaptured.getName());
