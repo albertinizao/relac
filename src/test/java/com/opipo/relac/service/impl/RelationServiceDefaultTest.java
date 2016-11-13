@@ -38,7 +38,7 @@ public class RelationServiceDefaultTest {
 		relationship.setCharacterName(otherName);
 		List<Relation> relations = new ArrayList<>();
 		Relation relation = new Relation();
-		relation.setDate(date);
+		relation.setDate(date.getTime());
 		relations.add(relation);
 		relationship.setRelation(relations);
 
@@ -64,10 +64,10 @@ public class RelationServiceDefaultTest {
 		relationship.setCharacterName(otherName);
 		List<Relation> relations = new ArrayList<>();
 		Relation relation = new Relation();
-		relation.setDate(date);
+		relation.setDate(date.getTime());
 		relations.add(relation);
 		Relation relation2 = new Relation();
-		relation2.setDate(gc.getTime());
+		relation2.setDate(gc.getTime().getTime());
 		relations.add(relation2);
 		relationship.setRelation(relations);
 
@@ -76,7 +76,7 @@ public class RelationServiceDefaultTest {
 		Relation relationActual = relationService.get(ownerName, otherName, date);
 
 		assertNotNull(relationActual);
-		assertEquals(date, relationActual.getDate());
+		assertEquals(Long.valueOf(date.getTime()), relationActual.getDate());
 	}
 
 	@Test(expected = NotFoundElement.class)
@@ -91,9 +91,9 @@ public class RelationServiceDefaultTest {
 		relationship.setCharacterName(otherName);
 		List<Relation> relations = new ArrayList<>();
 		Relation relation = new Relation();
-		relation.setDate(date);
+		relation.setDate(date.getTime());
 		Relation relation2 = new Relation();
-		relation2.setDate(gc.getTime());
+		relation2.setDate(gc.getTime().getTime());
 		relations.add(relation2);
 		relationship.setRelation(relations);
 
@@ -114,10 +114,10 @@ public class RelationServiceDefaultTest {
 		relationship.setCharacterName(otherName);
 		List<Relation> relations = new ArrayList<>();
 		Relation relation = new Relation();
-		relation.setDate(date);
+		relation.setDate(date.getTime());
 		// relations.add(relation);
 		Relation relation2 = new Relation();
-		relation2.setDate(gc.getTime());
+		relation2.setDate(gc.getTime().getTime());
 		relations.add(relation2);
 		relationship.setRelation(relations);
 
@@ -131,7 +131,7 @@ public class RelationServiceDefaultTest {
 		Relationship relationshipCaptured = relationshipCaptor.getValue();
 
 		assertNotNull(relationActual);
-		assertTrue(relationshipCaptured.getRelation().stream().anyMatch(p -> date.equals(p.getDate())));
+		assertTrue(relationshipCaptured.getRelation().stream().anyMatch(p -> date.getTime()==p.getDate()));
 	}
 
 	@Test
@@ -146,10 +146,10 @@ public class RelationServiceDefaultTest {
 		relationship.setCharacterName(otherName);
 		List<Relation> relations = new ArrayList<>();
 		Relation relation = new Relation();
-		relation.setDate(date);
+		relation.setDate(date.getTime());
 		// relations.add(relation);
 		Relation relation2 = new Relation();
-		relation2.setDate(gc.getTime());
+		relation2.setDate(gc.getTime().getTime());
 		relations.add(relation2);
 		relationship.setRelation(relations);
 

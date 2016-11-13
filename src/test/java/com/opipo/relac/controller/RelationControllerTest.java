@@ -36,20 +36,20 @@ public class RelationControllerTest {
 		String otherName = "Other name";
 		Date date = new Date();
 		Relation relation = new Relation();
-		relation.setDate(date);
+		relation.setDate(date.getTime());
 		List<Relation> relations = new ArrayList<>();
 		relations.add(relation);
 
 		Mockito.when(relationService.list(ownerName, otherName)).thenReturn(relations);
 
-		ResponseEntity<List<Date>> response = relationController.list(ownerName, otherName);
+		ResponseEntity<List<Long>> response = relationController.list(ownerName, otherName);
 
 		assertNotNull(response);
 		assertNotNull(response.getBody());
-		List<Date> dates = response.getBody();
+		List<Long> dates = response.getBody();
 		assertNotNull(dates);
 		assertFalse(dates.isEmpty());
-		assertTrue(dates.contains(date));
+		assertTrue(dates.contains(date.getTime()));
 		assertEquals(relations.size(), dates.size());
 		assertEquals("HTTPCode isn't ok", response.getStatusCode(), HttpStatus.OK);
 	}
@@ -60,7 +60,7 @@ public class RelationControllerTest {
 		String otherName = "Other name";
 		Date date = new Date();
 		Relation relation = new Relation();
-		relation.setDate(date);
+		relation.setDate(date.getTime());
 
 		Mockito.when(relationService.get(ownerName, otherName, date)).thenReturn(relation);
 
@@ -68,7 +68,7 @@ public class RelationControllerTest {
 
 		assertNotNull(response);
 		assertNotNull(response.getBody());
-		assertEquals(date, response.getBody().getDate());
+		assertEquals(Long.valueOf(date.getTime()), response.getBody().getDate());
 		assertEquals("HTTPCode isn't ok", response.getStatusCode(), HttpStatus.OK);
 
 	}
@@ -79,7 +79,7 @@ public class RelationControllerTest {
 		String otherName = "Other name";
 		Date date = new Date();
 		Relation relation = new Relation();
-		relation.setDate(date);
+		relation.setDate(date.getTime());
 
 		ArgumentCaptor<Relation> relationCaptor = ArgumentCaptor.forClass(Relation.class);
 		ResponseEntity response = relationController.create(ownerName, otherName, date.getTime());
@@ -87,7 +87,7 @@ public class RelationControllerTest {
 		Mockito.verify(relationService).save(Mockito.eq(ownerName), Mockito.eq(otherName), relationCaptor.capture());
 
 		assertNotNull("Character isn't send to service", relationCaptor.getValue());
-		assertEquals("The date is not the expected", date, relationCaptor.getValue().getDate());
+		assertEquals("The date is not the expected", Long.valueOf(date.getTime()), relationCaptor.getValue().getDate());
 		assertNotNull("Response is null", response);
 		assertNotNull("Response is null", response.getStatusCode());
 		assertEquals("HTTPCode isn't created", response.getStatusCode(), HttpStatus.CREATED);
@@ -100,7 +100,7 @@ public class RelationControllerTest {
 		String otherName = "Other name";
 		Date date = new Date();
 		Relation relation = new Relation();
-		relation.setDate(date);
+		relation.setDate(date.getTime());
 
 		Mockito.when(relationService.save(ownerName, otherName, relation)).thenReturn(relation);
 		ResponseEntity response = relationController.save(ownerName, otherName, date.getTime(), relation);

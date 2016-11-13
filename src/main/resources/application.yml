@@ -1,3 +1,18 @@
-app:
-   name: '@pom.artifactId@'
-   version: '@pom.version@'
+security:
+  oauth2:
+    client:
+      clientId: 30564562842-q13okkf5le2l5b98mvognn0eo3frgvo7.apps.googleusercontent.com
+      clientSecret: Un78dbqW-Wo_fMf9ldLfzh3P
+      accessTokenUri: https://www.googleapis.com/oauth2/v4/token
+      userAuthorizationUri: https://accounts.google.com/o/oauth2/v2/auth
+      clientAuthenticationScheme: form
+      scope:
+        - openid
+        - email
+        - profile
+    resource:
+      userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
+      preferTokenInfo: true
+
+user:
+    admin: [albertinizao@gmail.com]

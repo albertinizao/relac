@@ -25,9 +25,9 @@ public class RelationController {
 	private RelationService relationService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public ResponseEntity<List<Date>> list(@PathVariable("owner") String ownersName,
+	public ResponseEntity<List<Long>> list(@PathVariable("owner") String ownersName,
 			@PathVariable("otherCharacter") String otherName) {
-		return new ResponseEntity<List<Date>>(
+		return new ResponseEntity<List<Long>>(
 				relationService.list(ownersName, otherName).stream().map(f -> f.getDate()).collect(Collectors.toList()),
 				HttpStatus.OK);
 	}
@@ -42,7 +42,7 @@ public class RelationController {
 	public ResponseEntity save(@PathVariable("owner") String ownersName,
 			@PathVariable("otherCharacter") String otherName, @PathVariable("date") Long dateLong,
 			@RequestBody Relation relation) {
-		Assert.isTrue(new Date(dateLong).equals(relation.getDate()), "The date is not the expected");
+		Assert.isTrue(dateLong.equals(relation.getDate()), "The date is not the expected");
 		relationService.save(ownersName, otherName, relation);
 		return new ResponseEntity(HttpStatus.ACCEPTED);
 	}
@@ -51,7 +51,7 @@ public class RelationController {
 	public ResponseEntity create(@PathVariable("owner") String ownersName,
 			@PathVariable("otherCharacter") String otherName, @PathVariable("date") Long dateLong) {
 		Relation relation = new Relation();
-		relation.setDate(new Date(dateLong));
+		relation.setDate(new Date(dateLong).getTime());
 		relationService.save(ownersName, otherName, relation);
 		return new ResponseEntity(HttpStatus.CREATED);
 	}
