@@ -22,11 +22,14 @@ import org.springframework.http.ResponseEntity;
 import com.opipo.relac.exception.NotFoundElement;
 import com.opipo.relac.model.Character;
 import com.opipo.relac.service.CharacterService;
+import com.opipo.relac.service.UserService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CharacterControllerTest {
 	@Mock
 	private CharacterService characterService;
+	@Mock
+	private UserService userService;
 
 	@InjectMocks
 	private CharacterController characterController;
@@ -112,6 +115,7 @@ public class CharacterControllerTest {
 	public void givenNameThenCreateCharacter(){
 		String name = "Character's name";
 		Character character = new Character();
+		Mockito.when(userService.getUserIdentifier()).thenReturn(null);
 		
 		Mockito.when(characterService.get(name)).thenThrow(new NotFoundElement("character"));
 		
@@ -131,7 +135,7 @@ public class CharacterControllerTest {
 	public void givenNameOfCreatedCharacterThenThrowsException(){
 		String name = "Character's name";
 		Character character = new Character();
-		
+		Mockito.when(userService.getUserIdentifier()).thenReturn(null);
 		Mockito.when(characterService.get(name)).thenReturn(character);
 		characterController.create(name);
 	}

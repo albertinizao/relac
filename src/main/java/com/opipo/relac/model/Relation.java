@@ -12,16 +12,12 @@ public class Relation implements Comparable<Relation> {
 	private Integer funny;
 	private Integer affection;
 
-	public Date getDate() {
-		return date == null ? null : new Date(date.getTime());
+	public Long getDate() {
+		return date == null ? null : date.getTime();
 	}
 
 	public void setDate(Long date) {
 		this.date = date == null ? null : new Date(date);
-	}
-
-	public void setDate(Date date) {
-		this.date = date == null ? null : new Date(date.getTime());
 	}
 
 	public Integer getWorking() {

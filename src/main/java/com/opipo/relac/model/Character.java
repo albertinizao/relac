@@ -10,12 +10,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Character {
 	@Id
 	private String name;
+	private String user;
 	private List<Relationship> relationships;
 	public String getName() {
 		return name;
 	}
 	public void setName(String name) {
 		this.name = name;
+	}
+	public String getUser() {
+		return user;
+	}
+	public void setUser(String user) {
+		this.user = user;
 	}
 	public List<Relationship> getRelationships() {
 		return relationships==null?new ArrayList<>():new ArrayList<>(relationships);

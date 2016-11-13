@@ -28,7 +28,7 @@ public class RelationServiceDefault implements RelationService {
 	@Override
 	public Relation get(String ownersName, String characterName, Date date) {
 		return relationshipService.get(ownersName, characterName).getRelation().stream()
-				.filter(p -> date.equals(p.getDate())).findFirst()
+				.filter(p -> date.getTime()==p.getDate()).findFirst()
 				.orElseThrow(() -> new NotFoundElement(new StringBuilder("Relation with ").append(date).toString()));
 	}
 

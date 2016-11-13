@@ -18,7 +18,8 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import com.opipo.relac.model.Character;
 import com.opipo.relac.model.Relationship;
-import com.opipo.relac.repository.CharacterRepository;;
+import com.opipo.relac.repository.CharacterRepository;
+import com.opipo.relac.service.UserService;;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CharacterServiceDefaultTest {
@@ -27,6 +28,8 @@ public class CharacterServiceDefaultTest {
 
 	@Mock
 	private CharacterRepository characterRepository;
+	@Mock
+	private UserService userService;
 
 	@Test
 	public void givenNothingReturnAllCharacters() {
@@ -51,13 +54,17 @@ public class CharacterServiceDefaultTest {
 	@Test
 	public void givenCharacterUncompleteThenSaveIt(){
 		String name = "character's name";
+		String user = "user";
 		Character givenCharacter = new Character();
 		givenCharacter.setName(name);
 		Character completeCharacter = new Character();
 		completeCharacter.setName(name+"incorrect");
+		completeCharacter.setUser(user);
 		List<Relationship> relationships = new ArrayList<>();
 		completeCharacter.setRelationships(relationships);
 		Mockito.when(characterRepository.findOne(name)).thenReturn(completeCharacter);
+		Mockito.when(userService.userIsAdmin()).thenReturn(false);
+		Mockito.when(userService.getUserIdentifier()).thenReturn(user);
 		characterService.save(givenCharacter);
 		ArgumentCaptor<Character> characterCaptor = ArgumentCaptor.forClass(Character.class);
 		Mockito.verify(characterRepository).save(characterCaptor.capture());
@@ -70,9 +77,13 @@ public class CharacterServiceDefaultTest {
 	@Test
 	public void givenCharacterUncompleteThenSaveIt2(){
 		String name = "character's name";
+		String user = "user";
 		Character givenCharacter = new Character();
 		givenCharacter.setName(name);
+		givenCharacter.setUser(user);
 		Mockito.when(characterRepository.findOne(name)).thenReturn(null);
+		Mockito.when(userService.userIsAdmin()).thenReturn(true);
+		Mockito.when(userService.getUserIdentifier()).thenReturn(user);
 		characterService.save(givenCharacter);
 		ArgumentCaptor<Character> characterCaptor = ArgumentCaptor.forClass(Character.class);
 		Mockito.verify(characterRepository).save(characterCaptor.capture());
@@ -85,6 +96,13 @@ public class CharacterServiceDefaultTest {
 	@Test
 	public void givenCharacterNameThenDeleteIT(){
 		String name = "character's name";
+		String user = "user";
+		Character character = new Character();
+		character.setName(name);
+		character.setUser(user);
+		Mockito.when(characterRepository.findOne(name)).thenReturn(character);
+		Mockito.when(userService.userIsAdmin()).thenReturn(true);
+		Mockito.when(userService.getUserIdentifier()).thenReturn(user);
 		characterService.delete(name);
 		Mockito.verify(characterRepository).delete(name);
 		

@@ -13,3 +13,6 @@ security:
     resource:
       userInfoUri: https://www.googleapis.com/oauth2/v3/userinfo
       preferTokenInfo: true
+
+user:
+    admin: [albertinizao@gmail.com]
