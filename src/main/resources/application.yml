@@ -16,3 +16,8 @@ security:
 
 user:
     admin: [albertinizao@gmail.com]
+    
+spring:
+    data:
+        mongodb:
+            host: mongodb://relac:relac@ds139869.mlab.com:39869/heroku_3kspc207
