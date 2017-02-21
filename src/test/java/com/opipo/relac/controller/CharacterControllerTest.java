@@ -52,7 +52,7 @@ public class CharacterControllerTest {
 
 		Mockito.when(characterService.list()).thenReturn(characters);
 
-		ResponseEntity<Collection<String>> actual = characterController.list();
+		ResponseEntity<Collection<String>> actual = characterController.list(null);
 
 		assertNotNull("There is no actual",actual);
 		assertNotNull("There is no actual",actual.getBody());

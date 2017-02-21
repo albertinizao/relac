@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,9 +35,12 @@ public class CharacterController {
 	private UserService userService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
-	public @ResponseBody ResponseEntity<Collection<String>> list() {
+	public @ResponseBody ResponseEntity<Collection<String>> list(
+			@RequestParam(name = "owner", required = false) String owner) {
 		return new ResponseEntity<Collection<String>>(
-				characterService.list().stream().map(f -> f.getName()).collect(Collectors.toList()), HttpStatus.OK);
+				characterService.list().stream().filter(f -> owner == null || owner.equalsIgnoreCase(f.getUser()))
+						.map(f -> f.getName()).collect(Collectors.toList()),
+				HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{name}", method = RequestMethod.GET)
@@ -47,7 +51,8 @@ public class CharacterController {
 		for (Relationship relationship : relationshipsPrevious) {
 			List<Relation> relationPrevious = relationship.getRelation();
 			List<Relation> relations = new ArrayList<>();
-			Relation firstRelation = relationPrevious.stream().sorted((t,o)->o.getDate().compareTo(t.getDate())).findFirst().orElse(null);
+			Relation firstRelation = relationPrevious.stream().sorted((t, o) -> o.getDate().compareTo(t.getDate()))
+					.findFirst().orElse(null);
 			relations.add(firstRelation);
 			relationship.setRelation(relations);
 			relationships.add(relationship);
