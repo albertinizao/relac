@@ -134,7 +134,7 @@ public class RelacApplication extends WebSecurityConfigurerAdapter {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**");
+                registry.addMapping("/**");
             }
         };
     }
