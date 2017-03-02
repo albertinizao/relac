@@ -97,28 +97,6 @@ public class RelacApplication extends WebSecurityConfigurerAdapter {
 		};
 
 	}
-//
-//	@Bean
-//	public InitializingBean insertDefaultUsers() {
-//		return new InitializingBean() {
-//			@Autowired
-//			private UserRepository userRepository;
-//
-//			@Override
-//			public void afterPropertiesSet() {
-//				addUser("admin", "admin");
-//				addUser("user", "user");
-//			}
-//
-//			private void addUser(String username, String password) {
-//				User user = new User();
-//				user.setUsername(username);
-//				user.setPassword(new BCryptPasswordEncoder().encode(password));
-//				user.grantRole(username.equals("admin") ? UserRole.ADMIN : UserRole.USER);
-//				userRepository.save(user);
-//			}
-//		};
-//	}
 
 	@Bean
 	public Filter characterEncodingFilter() {
@@ -127,15 +105,4 @@ public class RelacApplication extends WebSecurityConfigurerAdapter {
 		characterEncodingFilter.setForceEncoding(true);
 		return characterEncodingFilter;
 	}
-
-
-//    @Bean
-//    public WebMvcConfigurer corsConfigurer() {
-//        return new WebMvcConfigurerAdapter() {
-//            @Override
-//            public void addCorsMappings(CorsRegistry registry) {
-//                registry.addMapping("/**");
-//            }
-//        };
-//    }
 }

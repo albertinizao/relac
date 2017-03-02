@@ -25,13 +25,15 @@ public class SimpleCORSFilter implements Filter {
 
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
-		String clientOrigin = request.getHeader("origin");
-		response.addHeader("Access-Control-Allow-Origin", clientOrigin);
-		response.setHeader("Access-Control-Allow-Methods", "POST, GET,  DELETE, PUT");
+		String origin = request.getHeader("origin");
+		if (!response.getHeaders("Access-Control-Allow-Origin").stream().anyMatch(p -> p.contains(origin))) {
+			response.addHeader("Access-Control-Allow-Origin", origin);
+			response.addHeader("Access-Control-Expose-Headers", "X-Auth-Token");
+		}
+		response.setHeader("Access-Control-Allow-Methods", "POST, GET,  DELETE, PUT, OPTION");
 		response.setHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("Access-Control-Max-Age", "3600");
 		response.setHeader("Access-Control-Allow-Headers", "Accept, Content-Type, Origin, Authorization, X-Auth-Token");
-		response.addHeader("Access-Control-Expose-Headers", "X-Auth-Token");
 
 		if (request.getMethod().equals("OPTIONS")) {
 			response.setStatus(HttpServletResponse.SC_OK);
