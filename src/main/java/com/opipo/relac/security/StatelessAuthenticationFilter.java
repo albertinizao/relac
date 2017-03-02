@@ -30,7 +30,8 @@ class StatelessAuthenticationFilter extends GenericFilterBean {
 
 		HttpServletRequest request = (HttpServletRequest) req;
 		HttpServletResponse response = (HttpServletResponse) res;
-		response.setHeader("Access-Control-Allow-Origin", request == null ? "*" : request.getHeader("Origin"));
+		String clientOrigin = request.getHeader("origin");
+		response.addHeader("Access-Control-Allow-Origin", clientOrigin);
 		response.setHeader("Access-Control-Allow-Credentials", "true");
 		response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE");
 		response.setHeader("Access-Control-Max-Age", "3600");
