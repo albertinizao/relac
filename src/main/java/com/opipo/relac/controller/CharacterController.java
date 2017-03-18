@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,8 +23,10 @@ import com.opipo.relac.exception.NotFoundElement;
 import com.opipo.relac.model.Character;
 import com.opipo.relac.model.Relation;
 import com.opipo.relac.model.Relationship;
+import com.opipo.relac.model.UserAuthentication;
 import com.opipo.relac.service.CharacterService;
 import com.opipo.relac.service.UserService;
+import com.opipo.relac.service.impl.TokenAuthenticationService;
 
 @RestController
 @RequestMapping("/character")
@@ -33,6 +37,12 @@ public class CharacterController {
 
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private HttpServletRequest httpServletRequest;
+
+	@Autowired
+	private TokenAuthenticationService tokenAuthenticationService;
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Collection<String>> list(
@@ -71,13 +81,13 @@ public class CharacterController {
 
 	@RequestMapping(value = "/{name}", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity create(@PathVariable("name") String name) {
-		System.out.println("TO POST");
 		Character character = new Character();
 		character.setName(name);
 		try {
 			Assert.isNull(characterService.get(name), "The character is already created");
 		} catch (NotFoundElement nfe) {
-			character.setUser(userService.getUserIdentifier());
+			character.setUser(
+					((UserAuthentication) tokenAuthenticationService.getAuthentication(httpServletRequest)).getName());
 			characterService.saveOverride(character);
 		}
 		return new ResponseEntity(HttpStatus.CREATED);

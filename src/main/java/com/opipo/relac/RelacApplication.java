@@ -46,37 +46,72 @@ public class RelacApplication extends WebSecurityConfigurerAdapter {
 
 			@Override
 			public void run(String... arg0) throws Exception {
-				Character character = new Character();
-				character.setName("Manolete");
-				Relationship relationship1 = new Relationship();
-				relationship1.setCharacterName("Paquito");
-				List<Relation> relations1 = new ArrayList<>();
-				Relation relation11 = new Relation();
-				relation11.setDate(new Date().getTime());
-				relation11.setWorking(8);
-				relation11.setConfidential(4);
-				relation11.setLoyalty(6);
-				relation11.setTrust(6);
-				relation11.setRespect(7);
-				relation11.setFunny(5);
-				relation11.setAffection(6);
-				relations1.add(relation11);
-				Relation relation12 = new Relation();
-				relation12.setDate(1486934646908L);
-				relation12.setWorking(7);
-				relation12.setConfidential(3);
-				relation12.setLoyalty(5);
-				relation12.setTrust(5);
-				relation12.setRespect(6);
-				relation12.setFunny(4);
-				relation12.setAffection(5);
-				relations1.add(relation12);
-				relationship1.setRelation(relations1);
-				List<Relationship> relationships = new ArrayList<>();
-				relationships.add(relationship1);
-				character.setRelationships(relationships);
-				characterRepository.delete(character);
-				characterRepository.save(character);
+				{
+					Character character = new Character();
+					character.setName("Manolete");
+					Relationship relationship1 = new Relationship();
+					relationship1.setCharacterName("Paquito");
+					List<Relation> relations1 = new ArrayList<>();
+					Relation relation11 = new Relation();
+					relation11.setDate(new Date().getTime());
+					relation11.setWorking(8);
+					relation11.setConfidential(4);
+					relation11.setLoyalty(6);
+					relation11.setTrust(6);
+					relation11.setRespect(7);
+					relation11.setFunny(5);
+					relation11.setAffection(6);
+					relations1.add(relation11);
+					Relation relation12 = new Relation();
+					relation12.setDate(1486934646908L);
+					relation12.setWorking(7);
+					relation12.setConfidential(3);
+					relation12.setLoyalty(5);
+					relation12.setTrust(5);
+					relation12.setRespect(6);
+					relation12.setFunny(4);
+					relation12.setAffection(5);
+					relations1.add(relation12);
+					relationship1.setRelation(relations1);
+					List<Relationship> relationships = new ArrayList<>();
+					relationships.add(relationship1);
+					character.setRelationships(relationships);
+					characterRepository.delete(character);
+					characterRepository.save(character);
+				}
+				{
+					Character character = new Character();
+					character.setName("Juancho");
+					Relationship relationship1 = new Relationship();
+					relationship1.setCharacterName("Ramón");
+					List<Relation> relations1 = new ArrayList<>();
+					Relation relation11 = new Relation();
+					relation11.setDate(new Date().getTime());
+					relation11.setWorking(8);
+					relation11.setConfidential(4);
+					relation11.setLoyalty(6);
+					relation11.setTrust(6);
+					relation11.setRespect(7);
+					relation11.setFunny(5);
+					relation11.setAffection(6);
+					relations1.add(relation11);
+					Relation relation12 = new Relation();
+					relation12.setDate(1486934646908L);
+					relation12.setWorking(7);
+					relation12.setConfidential(3);
+					relation12.setLoyalty(5);
+					relation12.setTrust(5);
+					relation12.setRespect(6);
+					relation12.setFunny(4);
+					relation12.setAffection(5);
+					relations1.add(relation12);
+					relationship1.setRelation(relations1);
+					List<Relationship> relationships = new ArrayList<>();
+					relationships.add(relationship1);
+					character.setRelationships(relationships);
+					characterRepository.delete(character);
+					characterRepository.save(character);
+				}
 				
 
 				User user = new User();

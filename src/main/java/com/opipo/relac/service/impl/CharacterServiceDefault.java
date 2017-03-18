@@ -2,12 +2,17 @@ package com.opipo.relac.service.impl;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.opipo.relac.exception.InvalidUser;
 import com.opipo.relac.exception.NotFoundElement;
 import com.opipo.relac.model.Character;
+import com.opipo.relac.model.UserAuthentication;
+import com.opipo.relac.model.UserRole;
 import com.opipo.relac.repository.CharacterRepository;
 import com.opipo.relac.service.CharacterService;
 import com.opipo.relac.service.UserService;
@@ -20,6 +25,12 @@ public class CharacterServiceDefault implements CharacterService {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private HttpServletRequest httpServletRequest;
+
+	@Autowired
+	private TokenAuthenticationService tokenAuthenticationService;
 
 	@Override
 	public List<Character> list() {
@@ -57,9 +68,11 @@ public class CharacterServiceDefault implements CharacterService {
 	}
 	
 	private void validateUser(Character character){
-		String user = userService.getUserIdentifier();
-		if (!character.getUser().equalsIgnoreCase(user) && !userService.userIsAdmin()) {
-			throw new InvalidUser(user);
+		UserAuthentication auth = (UserAuthentication) tokenAuthenticationService.getAuthentication(httpServletRequest);
+		if (null==auth){
+			throw new InvalidUser("No user");
+		}else if (!character.getUser().equalsIgnoreCase(auth.getName()) && !auth.getDetails().hasRole(UserRole.ADMIN)){
+			throw new InvalidUser(auth.getName()+" is invalid. The correct is "+character.getName());
 		}
 	}
 

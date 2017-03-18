@@ -10,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.opipo.relac.model.User;
 import com.opipo.relac.model.UserAuthentication;
-import com.opipo.relac.model.UserRole;
 import com.opipo.relac.repository.UserRepository;
 
 @RestController
@@ -59,31 +57,37 @@ public class UserController {
 		}
 
 		currentUser.setPassword(pwEncoder.encode(user.getNewPassword()));
-		userRepository.save(Arrays.asList(new User[]{currentUser}));
+		userRepository.save(Arrays.asList(new User[] { currentUser }));
 		return new ResponseEntity<String>("password changed", HttpStatus.OK);
 	}
 
-//	@RequestMapping(value = "{user}/grant/role/{role}", method = RequestMethod.POST)
-//	public ResponseEntity<String> grantRole(@PathVariable User user, @PathVariable UserRole role) {
-//		if (user == null) {
-//			return new ResponseEntity<String>("invalid user id", HttpStatus.UNPROCESSABLE_ENTITY);
-//		}
-//
-//		user.grantRole(role);
-//		userRepository.save(Arrays.asList(new User[]{user}));
-//		return new ResponseEntity<String>("role granted", HttpStatus.OK);
-//	}
-//
-//	@RequestMapping(value = "/{user}/revoke/role/{role}", method = RequestMethod.POST)
-//	public ResponseEntity<String> revokeRole(@PathVariable User user, @PathVariable UserRole role) {
-//		if (user == null) {
-//			return new ResponseEntity<String>("invalid user id", HttpStatus.UNPROCESSABLE_ENTITY);
-//		}
-//
-//		user.revokeRole(role);
-//		userRepository.save(Arrays.asList(new User[]{user}));
-//		return new ResponseEntity<String>("role revoked", HttpStatus.OK);
-//	}
+	// @RequestMapping(value = "{user}/grant/role/{role}", method =
+	// RequestMethod.POST)
+	// public ResponseEntity<String> grantRole(@PathVariable User user,
+	// @PathVariable UserRole role) {
+	// if (user == null) {
+	// return new ResponseEntity<String>("invalid user id",
+	// HttpStatus.UNPROCESSABLE_ENTITY);
+	// }
+	//
+	// user.grantRole(role);
+	// userRepository.save(Arrays.asList(new User[]{user}));
+	// return new ResponseEntity<String>("role granted", HttpStatus.OK);
+	// }
+	//
+	// @RequestMapping(value = "/{user}/revoke/role/{role}", method =
+	// RequestMethod.POST)
+	// public ResponseEntity<String> revokeRole(@PathVariable User user,
+	// @PathVariable UserRole role) {
+	// if (user == null) {
+	// return new ResponseEntity<String>("invalid user id",
+	// HttpStatus.UNPROCESSABLE_ENTITY);
+	// }
+	//
+	// user.revokeRole(role);
+	// userRepository.save(Arrays.asList(new User[]{user}));
+	// return new ResponseEntity<String>("role revoked", HttpStatus.OK);
+	// }
 
 	@RequestMapping(method = RequestMethod.GET)
 	public List<User> list() {

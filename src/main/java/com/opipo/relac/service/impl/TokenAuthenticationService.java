@@ -33,9 +33,12 @@ public class TokenAuthenticationService {
 	}
 
 	public Authentication getAuthentication(HttpServletRequest request) {
+		System.out.println("getAuthentication");
 		final String token = request.getHeader(AUTH_HEADER_NAME);
+		System.out.println("token "+token);
 		if (token != null) {
 			final User user = tokenHandler.parseUserFromToken(token);
+			System.out.println("user "+user);
 			if (user != null) {
 				return new UserAuthentication(user);
 			}
