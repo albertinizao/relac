@@ -50,11 +50,10 @@ public class CharacterController {
 			@RequestParam(name = "owner", required = false) String owner) {
 		UserAuthentication user = ((UserAuthentication) tokenAuthenticationService
 				.getAuthentication(httpServletRequest));
-		boolean superUser = user != null && user.getDetails().hasRole(UserRole.ADMIN);
-		return new ResponseEntity<Collection<String>>(
-				characterService.list().stream().filter(f -> (superUser && owner==null) || (owner != null && owner.equalsIgnoreCase(f.getUser())))
-						.map(f -> f.getName()).collect(Collectors.toList()),
-				HttpStatus.OK);
+		return new ResponseEntity<Collection<String>>(characterService.list().stream()
+				.filter(f -> owner == null || (user != null && user.getDetails().hasRole(UserRole.ADMIN))
+						|| (owner != null && user.getDetails() != null && owner.equalsIgnoreCase(f.getUser())))
+				.map(f -> f.getName()).collect(Collectors.toList()), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{name}", method = RequestMethod.GET)
