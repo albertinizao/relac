@@ -48,7 +48,7 @@ public class CharacterController {
 	public @ResponseBody ResponseEntity<Collection<String>> list(
 			@RequestParam(name = "owner", required = false) String owner) {
 		return new ResponseEntity<Collection<String>>(
-				characterService.list().stream().filter(f -> owner == null || owner.equalsIgnoreCase(f.getUser()))
+				characterService.list().stream().filter(f -> owner != null && owner.equalsIgnoreCase(f.getUser()))
 						.map(f -> f.getName()).collect(Collectors.toList()),
 				HttpStatus.OK);
 	}
