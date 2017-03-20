@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.opipo.relac.model.CreationUser;
 import com.opipo.relac.model.User;
 import com.opipo.relac.model.UserAuthentication;
 import com.opipo.relac.model.UserRole;
@@ -63,10 +64,12 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public void create(User userGiven) {
+	public void create(@RequestBody final CreationUser userGiven) {
+		System.out.println("User: "+userGiven.getUsername());
+		System.out.println("Password: "+userGiven.getPassword());
 		User user = new User();
 		user.setUsername(userGiven.getUsername());
-		user.setPassword(new BCryptPasswordEncoder().encode(userGiven.getNewPassword()));
+		user.setPassword(new BCryptPasswordEncoder().encode(userGiven.getPassword()));
 		user.grantRole(UserRole.USER);
 		userRepository.save(user);
 	}
