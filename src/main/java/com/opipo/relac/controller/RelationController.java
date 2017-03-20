@@ -27,15 +27,15 @@ public class RelationController {
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ResponseEntity<List<Long>> list(@PathVariable("owner") String ownersName,
 			@PathVariable("otherCharacter") String otherName) {
-		return new ResponseEntity<List<Long>>(
-				relationService.list(ownersName, otherName).stream().map(f -> f.getDate()).collect(Collectors.toList()),
-				HttpStatus.OK);
+		return new ResponseEntity<List<Long>>(relationService.list(ownersName, otherName).stream().map(f -> f.getDate())
+				.sorted((c1,c2)->c2.compareTo(c1)).collect(Collectors.toList()), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{date}", method = RequestMethod.GET)
 	public ResponseEntity<Relation> get(@PathVariable("owner") String ownersName,
 			@PathVariable("otherCharacter") String otherName, @PathVariable("date") Long dateLong) {
-		return new ResponseEntity<Relation>(relationService.get(ownersName, otherName, new Date(dateLong)), HttpStatus.OK);
+		return new ResponseEntity<Relation>(relationService.get(ownersName, otherName, new Date(dateLong)),
+				HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{date}", method = RequestMethod.PUT)
