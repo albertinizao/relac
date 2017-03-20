@@ -24,6 +24,7 @@ import com.opipo.relac.model.Character;
 import com.opipo.relac.model.Relation;
 import com.opipo.relac.model.Relationship;
 import com.opipo.relac.model.UserAuthentication;
+import com.opipo.relac.model.UserRole;
 import com.opipo.relac.service.CharacterService;
 import com.opipo.relac.service.UserService;
 import com.opipo.relac.service.impl.TokenAuthenticationService;
@@ -47,8 +48,11 @@ public class CharacterController {
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Collection<String>> list(
 			@RequestParam(name = "owner", required = false) String owner) {
+		UserAuthentication user = ((UserAuthentication) tokenAuthenticationService
+				.getAuthentication(httpServletRequest));
+		boolean superUser = user != null && user.getDetails().hasRole(UserRole.ADMIN);
 		return new ResponseEntity<Collection<String>>(
-				characterService.list().stream().filter(f -> owner != null && owner.equalsIgnoreCase(f.getUser()))
+				characterService.list().stream().filter(f -> (superUser && owner==null) || (owner != null && owner.equalsIgnoreCase(f.getUser())))
 						.map(f -> f.getName()).collect(Collectors.toList()),
 				HttpStatus.OK);
 	}

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.opipo.relac.model.User;
 import com.opipo.relac.model.UserAuthentication;
+import com.opipo.relac.model.UserRole;
 import com.opipo.relac.repository.UserRepository;
 
 @RestController
@@ -61,34 +62,15 @@ public class UserController {
 		return new ResponseEntity<String>("password changed", HttpStatus.OK);
 	}
 
-	// @RequestMapping(value = "{user}/grant/role/{role}", method =
-	// RequestMethod.POST)
-	// public ResponseEntity<String> grantRole(@PathVariable User user,
-	// @PathVariable UserRole role) {
-	// if (user == null) {
-	// return new ResponseEntity<String>("invalid user id",
-	// HttpStatus.UNPROCESSABLE_ENTITY);
-	// }
-	//
-	// user.grantRole(role);
-	// userRepository.save(Arrays.asList(new User[]{user}));
-	// return new ResponseEntity<String>("role granted", HttpStatus.OK);
-	// }
-	//
-	// @RequestMapping(value = "/{user}/revoke/role/{role}", method =
-	// RequestMethod.POST)
-	// public ResponseEntity<String> revokeRole(@PathVariable User user,
-	// @PathVariable UserRole role) {
-	// if (user == null) {
-	// return new ResponseEntity<String>("invalid user id",
-	// HttpStatus.UNPROCESSABLE_ENTITY);
-	// }
-	//
-	// user.revokeRole(role);
-	// userRepository.save(Arrays.asList(new User[]{user}));
-	// return new ResponseEntity<String>("role revoked", HttpStatus.OK);
-	// }
-
+	@RequestMapping(value = "", method = RequestMethod.POST)
+	public void create(User userGiven) {
+		User user = new User();
+		user.setUsername(userGiven.getUsername());
+		user.setPassword(new BCryptPasswordEncoder().encode(userGiven.getNewPassword()));
+		user.grantRole(UserRole.USER);
+		userRepository.save(user);
+	}
+	
 	@RequestMapping(method = RequestMethod.GET)
 	public List<User> list() {
 		return userRepository.findAll();
