@@ -3,6 +3,7 @@ package com.opipo.relac.controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +27,6 @@ import com.opipo.relac.model.Relationship;
 import com.opipo.relac.model.UserAuthentication;
 import com.opipo.relac.model.UserRole;
 import com.opipo.relac.service.CharacterService;
-import com.opipo.relac.service.UserService;
 import com.opipo.relac.service.impl.TokenAuthenticationService;
 
 @RestController
@@ -37,9 +37,6 @@ public class CharacterController {
 	private CharacterService characterService;
 
 	@Autowired
-	private UserService userService;
-
-	@Autowired
 	private HttpServletRequest httpServletRequest;
 
 	@Autowired
@@ -47,10 +44,11 @@ public class CharacterController {
 
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public @ResponseBody ResponseEntity<Collection<String>> list(
-			@RequestParam(name = "owner", required = false) String owner) {
+			@RequestParam(name = "owner", required = false) String owner,
+			@RequestParam(name = "game", required = false) String game) {
 		UserAuthentication user = ((UserAuthentication) tokenAuthenticationService
 				.getAuthentication(httpServletRequest));
-		return new ResponseEntity<Collection<String>>(characterService.list().stream()
+		return new ResponseEntity<Collection<String>>(characterService.list(game).stream()
 				.filter(f -> owner == null || (user != null && user.getDetails().hasRole(UserRole.ADMIN))
 						|| (owner != null && user.getDetails() != null && owner.equalsIgnoreCase(f.getUser())))
 				.map(f -> f.getName()).collect(Collectors.toList()), HttpStatus.OK);
@@ -83,8 +81,8 @@ public class CharacterController {
 	}
 
 	@RequestMapping(value = "/{name}", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity create(@PathVariable("name") String name) {
-		Character character = new Character();
+	public @ResponseBody ResponseEntity create(@PathVariable("name") String name, @RequestBody(required=false) Character characterGiven) {
+		Character character = characterGiven==null?new Character():characterGiven;
 		character.setName(name);
 		try {
 			Assert.isNull(characterService.get(name), "The character is already created");

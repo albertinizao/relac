@@ -37,7 +37,7 @@ public class CharacterServiceDefaultTest {
 		List<Character> expected = new ArrayList<>();
 		expected.add(characters);
 		Mockito.when(characterRepository.findAll()).thenReturn(expected);
-		List<Character> actual = characterService.list();
+		List<Character> actual = characterService.list(null);
 		assertEquals(expected, actual);
 
 	}

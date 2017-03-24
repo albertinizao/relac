@@ -50,9 +50,9 @@ public class CharacterControllerTest {
 		characters.add(character1);
 		characters.add(character2);
 
-		Mockito.when(characterService.list()).thenReturn(characters);
+		Mockito.when(characterService.list(null)).thenReturn(characters);
 
-		ResponseEntity<Collection<String>> actual = characterController.list(null);
+		ResponseEntity<Collection<String>> actual = characterController.list(null,null);
 
 		assertNotNull("There is no actual",actual);
 		assertNotNull("There is no actual",actual.getBody());
@@ -120,7 +120,7 @@ public class CharacterControllerTest {
 		Mockito.when(characterService.get(name)).thenThrow(new NotFoundElement("character"));
 		
 		ArgumentCaptor<Character> characterCaptor = ArgumentCaptor.forClass(Character.class);
-		ResponseEntity response = characterController.create(name);
+		ResponseEntity response = characterController.create(name,null);
 		
 		Mockito.verify(characterService).saveOverride(characterCaptor.capture());
 		
@@ -137,6 +137,6 @@ public class CharacterControllerTest {
 		Character character = new Character();
 		Mockito.when(userService.getUserIdentifier()).thenReturn(null);
 		Mockito.when(characterService.get(name)).thenReturn(character);
-		characterController.create(name);
+		characterController.create(name, null);
 	}
 }

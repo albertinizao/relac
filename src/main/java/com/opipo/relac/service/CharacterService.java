@@ -5,7 +5,7 @@ import java.util.List;
 import com.opipo.relac.model.Character;
 
 public interface CharacterService {
-	List<Character> list();
+	List<Character> list(String game);
 	Character get(String name);
 	Character save(Character character);
 	Character saveOverride(Character character);

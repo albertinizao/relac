@@ -4,12 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 public class Character {
 	@Id
 	private String name;
+	@Indexed
+	private String game;
 	private String user;
 	private List<Relationship> relationships;
 	public String getName() {
@@ -30,6 +33,13 @@ public class Character {
 	public void setRelationships(List<Relationship> relationships) {
 		this.relationships = relationships==null?null:new ArrayList<>(relationships);
 	}
+	public String getGame() {
+		return game;
+	}
+	public void setGame(String game) {
+		this.game = game;
+	}
+	
 	
 	
 }

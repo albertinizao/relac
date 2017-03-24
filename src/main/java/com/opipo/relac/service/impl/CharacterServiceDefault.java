@@ -5,7 +5,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import com.opipo.relac.exception.InvalidUser;
@@ -25,7 +24,7 @@ public class CharacterServiceDefault implements CharacterService {
 
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private HttpServletRequest httpServletRequest;
 
@@ -33,8 +32,8 @@ public class CharacterServiceDefault implements CharacterService {
 	private TokenAuthenticationService tokenAuthenticationService;
 
 	@Override
-	public List<Character> list() {
-		return characterRepository.findAll();
+	public List<Character> list(String game) {
+		return game == null ? characterRepository.findAll() : characterRepository.findByGame(game);
 	}
 
 	@Override
@@ -66,18 +65,18 @@ public class CharacterServiceDefault implements CharacterService {
 		validateUser(name);
 		characterRepository.delete(name);
 	}
-	
-	private void validateUser(Character character){
+
+	private void validateUser(Character character) {
 		UserAuthentication auth = (UserAuthentication) tokenAuthenticationService.getAuthentication(httpServletRequest);
-		if (null==auth){
+		if (null == auth) {
 			throw new InvalidUser("No user");
-		}else if (!character.getUser().equalsIgnoreCase(auth.getName()) && !auth.getDetails().hasRole(UserRole.ADMIN)){
-			throw new InvalidUser(auth.getName()+" is invalid. The correct is "+character.getName());
+		} else if (!character.getUser().equalsIgnoreCase(auth.getName())
+				&& !auth.getDetails().hasRole(UserRole.ADMIN)) {
+			throw new InvalidUser(auth.getName() + " is invalid. The correct is " + character.getName());
 		}
 	}
 
-	
-	private void validateUser(String name){
+	private void validateUser(String name) {
 		validateUser(characterRepository.findOne(name));
 	}
 

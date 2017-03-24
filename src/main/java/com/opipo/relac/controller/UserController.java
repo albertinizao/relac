@@ -65,8 +65,6 @@ public class UserController {
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	public void create(@RequestBody final CreationUser userGiven) {
-		System.out.println("User: "+userGiven.getUsername());
-		System.out.println("Password: "+userGiven.getPassword());
 		User user = new User();
 		user.setUsername(userGiven.getUsername());
 		user.setPassword(new BCryptPasswordEncoder().encode(userGiven.getPassword()));
