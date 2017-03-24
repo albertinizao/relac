@@ -3,7 +3,6 @@ package com.opipo.relac.controller;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
@@ -81,8 +80,9 @@ public class CharacterController {
 	}
 
 	@RequestMapping(value = "/{name}", method = RequestMethod.POST)
-	public @ResponseBody ResponseEntity create(@PathVariable("name") String name, @RequestBody(required=false) Character characterGiven) {
-		Character character = characterGiven==null?new Character():characterGiven;
+	public @ResponseBody ResponseEntity create(@PathVariable("name") String name,
+			@RequestBody(required = false) Character characterGiven) {
+		Character character = characterGiven == null ? new Character() : characterGiven;
 		character.setName(name);
 		try {
 			Assert.isNull(characterService.get(name), "The character is already created");
