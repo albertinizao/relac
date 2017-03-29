@@ -56,18 +56,14 @@ public class RelationshipController {
 	@RequestMapping(value = "/{characterName}", method = RequestMethod.POST)
 	public ResponseEntity create(@PathVariable("owner") String ownersName,
 			@PathVariable("characterName") String otherName) {
-		try{
-			if (relationshipService.get(ownersName, otherName) == null) {
-				Relationship relationship = new Relationship();
-				relationship.setCharacterName(otherName);
-				relationshipService.save(ownersName, relationship);
-				return new ResponseEntity(HttpStatus.CREATED);
-			} else {
-				return new ResponseEntity(HttpStatus.CONFLICT);
-			}
-
-		}catch(com.opipo.relac.exception.NotFoundElement e){
+		try {
+			relationshipService.get(ownersName, otherName);
 			return new ResponseEntity(HttpStatus.CONFLICT);
+		} catch (com.opipo.relac.exception.NotFoundElement e) {
+			Relationship relationship = new Relationship();
+			relationship.setCharacterName(otherName);
+			relationshipService.save(ownersName, relationship);
+			return new ResponseEntity(HttpStatus.CREATED);
 		}
 	}
 

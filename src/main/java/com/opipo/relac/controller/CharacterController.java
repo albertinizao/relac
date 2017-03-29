@@ -82,19 +82,16 @@ public class CharacterController {
 	@RequestMapping(value = "/{name}", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity create(@PathVariable("name") String name,
 			@RequestBody(required = false) Character characterGiven) {
-		try{
-			if (characterService.get(name) == null) {
-				Character character = characterGiven == null ? new Character() : characterGiven;
-				character.setName(name);
-				character.setUser(
-						((UserAuthentication) tokenAuthenticationService.getAuthentication(httpServletRequest)).getName());
-				characterService.saveOverride(character);
-				return new ResponseEntity(HttpStatus.CREATED);
-			} else {
-				return new ResponseEntity(HttpStatus.CONFLICT);
-			}
-		}catch(com.opipo.relac.exception.NotFoundElement e){
+		try {
+			characterService.get(name);
 			return new ResponseEntity(HttpStatus.CONFLICT);
+		} catch (com.opipo.relac.exception.NotFoundElement e) {
+			Character character = characterGiven == null ? new Character() : characterGiven;
+			character.setName(name);
+			character.setUser(
+					((UserAuthentication) tokenAuthenticationService.getAuthentication(httpServletRequest)).getName());
+			characterService.saveOverride(character);
+			return new ResponseEntity(HttpStatus.CREATED);
 		}
 	}
 }
