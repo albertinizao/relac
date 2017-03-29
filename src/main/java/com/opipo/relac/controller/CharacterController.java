@@ -84,13 +84,13 @@ public class CharacterController {
 			@RequestBody(required = false) Character characterGiven) {
 		Character character = characterGiven == null ? new Character() : characterGiven;
 		character.setName(name);
-		try {
-			Assert.isNull(characterService.get(name), "The character is already created");
-		} catch (NotFoundElement nfe) {
+		if (characterService.get(name) == null) {
 			character.setUser(
 					((UserAuthentication) tokenAuthenticationService.getAuthentication(httpServletRequest)).getName());
 			characterService.saveOverride(character);
+			return new ResponseEntity(HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity(HttpStatus.CONFLICT);
 		}
-		return new ResponseEntity(HttpStatus.CREATED);
 	}
 }

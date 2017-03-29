@@ -64,14 +64,19 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "", method = RequestMethod.POST)
-	public void create(@RequestBody final CreationUser userGiven) {
-		User user = new User();
-		user.setUsername(userGiven.getUsername());
-		user.setPassword(new BCryptPasswordEncoder().encode(userGiven.getPassword()));
-		user.grantRole(UserRole.USER);
-		userRepository.save(user);
+	public ResponseEntity create(@RequestBody final CreationUser userGiven) {
+		if (userRepository.findByUsername(userGiven.getUsername()) == null) {
+			User user = new User();
+			user.setUsername(userGiven.getUsername());
+			user.setPassword(new BCryptPasswordEncoder().encode(userGiven.getPassword()));
+			user.grantRole(UserRole.USER);
+			userRepository.save(user);
+			return new ResponseEntity(HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity(HttpStatus.CONFLICT);
+		}
 	}
-	
+
 	@RequestMapping(method = RequestMethod.GET)
 	public List<User> list() {
 		return userRepository.findAll();

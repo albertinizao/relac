@@ -38,7 +38,8 @@ public class RelationshipController {
 		Relationship relationship = relationshipService.get(ownersName, otherName);
 		List<Relation> relationPrevious = relationship.getRelation();
 		List<Relation> relations = new ArrayList<>();
-		Relation firstRelation = relationPrevious.stream().sorted((t,o)->o.getDate().compareTo(t.getDate())).findFirst().orElse(null);
+		Relation firstRelation = relationPrevious.stream().sorted((t, o) -> o.getDate().compareTo(t.getDate()))
+				.findFirst().orElse(null);
 		relations.add(firstRelation);
 		relationship.setRelation(relations);
 		return new ResponseEntity<Relationship>(relationship, HttpStatus.OK);
@@ -55,10 +56,14 @@ public class RelationshipController {
 	@RequestMapping(value = "/{characterName}", method = RequestMethod.POST)
 	public ResponseEntity create(@PathVariable("owner") String ownersName,
 			@PathVariable("characterName") String otherName) {
-		Relationship relationship = new Relationship();
-		relationship.setCharacterName(otherName);
-		relationshipService.save(ownersName, relationship);
-		return new ResponseEntity(HttpStatus.CREATED);
+		if (relationshipService.get(ownersName, otherName) == null) {
+			Relationship relationship = new Relationship();
+			relationship.setCharacterName(otherName);
+			relationshipService.save(ownersName, relationship);
+			return new ResponseEntity(HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity(HttpStatus.CONFLICT);
+		}
 	}
 
 }
