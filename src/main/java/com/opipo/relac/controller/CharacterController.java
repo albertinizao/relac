@@ -93,7 +93,7 @@ public class CharacterController {
 			} else {
 				return new ResponseEntity(HttpStatus.CONFLICT);
 			}
-		}catch(Exception e){
+		}catch(com.opipo.relac.exception.NotFoundElement e){
 			return new ResponseEntity(HttpStatus.CONFLICT);
 		}
 	}
