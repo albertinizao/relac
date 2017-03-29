@@ -82,14 +82,18 @@ public class CharacterController {
 	@RequestMapping(value = "/{name}", method = RequestMethod.POST)
 	public @ResponseBody ResponseEntity create(@PathVariable("name") String name,
 			@RequestBody(required = false) Character characterGiven) {
-		Character character = characterGiven == null ? new Character() : characterGiven;
-		character.setName(name);
-		if (characterService.get(name) == null) {
-			character.setUser(
-					((UserAuthentication) tokenAuthenticationService.getAuthentication(httpServletRequest)).getName());
-			characterService.saveOverride(character);
-			return new ResponseEntity(HttpStatus.CREATED);
-		} else {
+		try{
+			if (characterService.get(name) == null) {
+				Character character = characterGiven == null ? new Character() : characterGiven;
+				character.setName(name);
+				character.setUser(
+						((UserAuthentication) tokenAuthenticationService.getAuthentication(httpServletRequest)).getName());
+				characterService.saveOverride(character);
+				return new ResponseEntity(HttpStatus.CREATED);
+			} else {
+				return new ResponseEntity(HttpStatus.CONFLICT);
+			}
+		}catch(Exception e){
 			return new ResponseEntity(HttpStatus.CONFLICT);
 		}
 	}
