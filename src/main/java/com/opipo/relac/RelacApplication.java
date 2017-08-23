@@ -27,7 +27,6 @@ import com.opipo.relac.repository.CharacterRepository;
 import com.opipo.relac.repository.UserRepository;
 
 @SpringBootApplication
-//@EnableOAuth2Sso
 public class RelacApplication extends WebSecurityConfigurerAdapter {
 
 	public static void main(String[] args) {
@@ -54,7 +53,6 @@ public class RelacApplication extends WebSecurityConfigurerAdapter {
 				userRepository.save(user);
 
 			}
-
 		};
 
 	}
